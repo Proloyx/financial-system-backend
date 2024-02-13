@@ -25,7 +25,7 @@ namespace FinancialSystem.Controllers
                 value = b.value
             }));
         }
-        [HttpGet("search")]
+        [HttpGet("search/{search}")]
         public async Task<ActionResult<List<Seriess>>> Search(string search)
         {
             Response response = await _request.Search(search);
