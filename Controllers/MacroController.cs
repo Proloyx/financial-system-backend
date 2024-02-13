@@ -15,7 +15,7 @@ namespace FinancialSystem.Controllers
             _request = request;
         }
 
-        [HttpGet("observation")]
+        [HttpGet("observation/{id}")]
         public async Task<ActionResult<List<Observation>>> GetObservation(string id)
         { 
             Response response = await _request.GetObservation(id);
