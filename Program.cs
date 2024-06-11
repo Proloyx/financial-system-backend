@@ -1,7 +1,6 @@
 using FinancialSystem.Interfaces;
+using FinancialSystem.Models;
 using FinancialSystem.Services;
-using FinancialSystemBackend.Interfaces;
-using FinancialSystemBackend.Services;
 
 
 DotNetEnv.Env.Load();
@@ -12,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddSingleton<IRequest,Request>();
 //builder.Services.AddSingleton<IUrlBuilder,UrlBuilder>();
 var app = builder.Build();

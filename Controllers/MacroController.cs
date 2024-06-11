@@ -2,7 +2,14 @@ using FinancialSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using FinancialSystem.Interfaces;
 using System.Text.Json;
-using FinancialSystemBackend.Models;
+using FinancialSystem.Models.QueryParams;
+using Sprache;
+using System;
+using System.Reflection;
+using FinancialSystem.Services;
+using FinancialSystem.Models.ObservationModels;
+using FinancialSystem.Models.SearchModels;
+using AutoMapper;
 namespace FinancialSystem.Controllers
 
 {
@@ -10,36 +17,46 @@ namespace FinancialSystem.Controllers
     public class MacroController : ControllerBase
     {
         IRequest _request;
-        public MacroController(IRequest request)
+        IMapper _mapper;
+        public MacroController(IRequest request, IMapper maper)
         {
             _request = request;
+            _mapper = maper;
         }
 
-        [HttpGet("observation/{id}")]
-        public async Task<ActionResult<List<Observation>>> GetObservation(string id)
-        { 
-            Response response = await _request.GetObservation(id);
-            Series root = JsonSerializer.Deserialize<Series>(response.Result.ToString());
-            return Ok(root.observations.Select(b=> new {
-                date = b.date,
-                value = b.value
-            }));
+        [HttpGet("observation")]
+        public async Task<ActionResult<List<ObservRetDTO>>> Observation([FromQuery] ObservationParams observationParams){
+            try
+            {
+                string url = UrlBuilder.Build("/series/observations", observationParams);
+                var response = await _request.Send(url);
+                var result = await response.Content.ReadAsStringAsync();
+                var des = JsonSerializer.Deserialize<Series>(result)?.observations;
+                var ret = _mapper.Map<List<ObservRetDTO>>(des);
+                return response.IsSuccessStatusCode ? Ok(ret) : StatusCode((int)response.StatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
-        [HttpGet("search/{search}")]
-        public async Task<ActionResult<List<Seriess>>> Search(string search)
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<SeriessRetDTO>>> Search([FromQuery] SearchParams searchParams)
         {
-            Response response = await _request.Search(search);
-            Search sea = JsonSerializer.Deserialize<Search>(response.Result.ToString());
-            return Ok(sea.seriess.Select(b=>new{
-                id = b.id,
-                title = b.title,
-                observation_start = b.observation_start,
-                observation_end = b.observation_end,
-                frequency = b.frequency,
-                units = b.units,
-                seasonal_adjustment= b.seasonal_adjustment,
-                notes = b.notes
-            }));
+            try
+            {
+                string url = UrlBuilder.Build("/series/search", searchParams);
+                var response = await _request.Send(url);
+                var result = await response.Content.ReadAsStringAsync();
+                var des = JsonSerializer.Deserialize<Search>(result)?.seriess;
+                var ret = _mapper.Map<List<SeriessRetDTO>>(des);
+                return response.IsSuccessStatusCode ? Ok(ret) : StatusCode((int)response.StatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }   

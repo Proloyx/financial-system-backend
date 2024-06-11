@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FinancialSystem.Models;
+using FinancialSystem.Models.QueryParams;
 
 namespace FinancialSystem.Interfaces
 {
     public interface IRequest
     {
-        public Task<Response> GetObservation (string chart);
-        public Task<Response> Search (string search);
+        public Task<HttpResponseMessage> Send(string url);
     }
 }

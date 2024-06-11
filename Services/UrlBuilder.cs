@@ -1,18 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using FinancialSystemBackend.Interfaces;
+using DotNetEnv;
+using FinancialSystem.Models.QueryParams;
+using FinancialSystem.Models;
 using Microsoft.AspNetCore.WebUtilities;
+using FinancialSystem.Interfaces;
 
-namespace FinancialSystemBackend.Services
+namespace FinancialSystem.Services
 {
-    public static class UrlBuilder//:IUrlBuilder
+    public class UrlBuilder
     {
-        public static string GetUrl(string Url, Dictionary<string,string?> QueryParams)
+        public static string Build(string endpoint, QueryParams queryParams)
         {
-            string newurl = QueryHelpers.AddQueryString(Url, QueryParams);
-            return newurl;
+            var url = Env.GetString("FredUrl") + endpoint + "?";
+            var query = queryParams
+                                .GetType()
+                                .GetProperties()
+                                .Where(prop => prop.CanRead && prop.GetValue(queryParams) != null)
+                                .Select(prop => $"{prop.Name}={Uri.EscapeDataString(prop.GetValue(queryParams).ToString())}");                    
+            return url + string.Join("&",query);
         }
     }
 }
