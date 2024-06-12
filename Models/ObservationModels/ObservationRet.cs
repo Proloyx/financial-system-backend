@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FinancialSystem.Models.ObservationModels
 {
-    public class ObservRetDTO
+    public class ObservationRet
     {
         public string? date {get; set;}
         public string? value {get; set;}

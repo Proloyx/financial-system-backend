@@ -13,26 +13,26 @@ using AutoMapper;
 namespace FinancialSystem.Controllers
 
 {
-    [Route("[controller]")]
-    public class MacroController : ControllerBase
+    [Route("series")]
+    public class SeriesController : ControllerBase
     {
-        IRequest _request;
-        IMapper _mapper;
-        public MacroController(IRequest request, IMapper maper)
+        private readonly IRequest _request;
+        private readonly IMapper _mapper;
+        public SeriesController(IRequest request, IMapper maper)
         {
             _request = request;
             _mapper = maper;
         }
 
         [HttpGet("observation")]
-        public async Task<ActionResult<List<ObservRetDTO>>> Observation([FromQuery] ObservationParams observationParams){
+        public async Task<ActionResult<List<ObservationRet>>> GetObservationAsync([FromQuery] ObservationParams observationParams){
             try
             {
                 string url = UrlBuilder.Build("/series/observations", observationParams);
                 var response = await _request.Send(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var des = JsonSerializer.Deserialize<Series>(result)?.observations;
-                var ret = _mapper.Map<List<ObservRetDTO>>(des);
+                var ret = _mapper.Map<List<ObservationRet>>(des);
                 return response.IsSuccessStatusCode ? Ok(ret) : StatusCode((int)response.StatusCode, result);
             }
             catch (Exception e)
@@ -42,7 +42,7 @@ namespace FinancialSystem.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<List<SeriessRetDTO>>> Search([FromQuery] SearchParams searchParams)
+        public async Task<ActionResult<List<SeriessRet>>> GetSearchAsync([FromQuery] SearchParams searchParams)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace FinancialSystem.Controllers
                 var response = await _request.Send(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var des = JsonSerializer.Deserialize<Search>(result)?.seriess;
-                var ret = _mapper.Map<List<SeriessRetDTO>>(des);
+                var ret = _mapper.Map<List<SeriessRet>>(des);
                 return response.IsSuccessStatusCode ? Ok(ret) : StatusCode((int)response.StatusCode, result);
             }
             catch (Exception e)

@@ -1,6 +1,9 @@
+using System.Reflection.Metadata.Ecma335;
+using DotNetEnv;
 using FinancialSystem.Interfaces;
 using FinancialSystem.Models;
 using FinancialSystem.Services;
+using Google.Cloud.Firestore;
 
 
 DotNetEnv.Env.Load();
@@ -13,7 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddSingleton<IRequest,Request>();
-//builder.Services.AddSingleton<IUrlBuilder,UrlBuilder>();
+builder.Services.AddSingleton<FirestoreDb>(provider => FirestoreDb.Create(Env.GetString("ProjectId")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

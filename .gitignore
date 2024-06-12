@@ -259,3 +259,4 @@ pub/
 .eshopdocker_*
 .env
 .Model2
+firebase.json

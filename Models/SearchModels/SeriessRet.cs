@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FinancialSystem.Models.SearchModels
 {
-    public class SeriessRetDTO
+    public class SeriessRet
     {
         public string? id { get; set; }
         public string? title { get; set; }
