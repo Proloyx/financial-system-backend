@@ -26,7 +26,7 @@ namespace FinancialSystem
             _firestore = firestore;
         }
 
-        [HttpGet("get")]
+        [HttpGet("getall")]
         public async Task<ActionResult<List<UserRet>>> GetUsersAsync()
         {
             try
@@ -43,7 +43,7 @@ namespace FinancialSystem
             }
         }
 
-        [HttpGet("getid/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<User>> GetUserByIdAsync(string id)
         {
             try
@@ -51,7 +51,7 @@ namespace FinancialSystem
                 var collection = _firestore.Collection("users");
                 var snapshot = await collection.Document(id).GetSnapshotAsync();
                 var ret = snapshot.ConvertTo<User>();
-                return ret != null ? Ok(ret) : NotFound("No se encuentra al usuario");
+                return ret != null ? Ok(ret) : NotFound("El usuario no se encontró");
             }
             catch (Exception e)
             {
@@ -66,7 +66,7 @@ namespace FinancialSystem
             {
                 var collection = _firestore.Collection("users");
                 var ret = await collection.AddAsync(_mapper.Map<User>(user));
-                return ret.Id != null ? Created() : BadRequest("No se pudo crear al usuario");
+                return ret.Id != null ? StatusCode(201, "El usuario se añadió") : BadRequest("No se pudo añadir al usuario");
             }
             catch (Exception e)
             {
@@ -74,17 +74,17 @@ namespace FinancialSystem
             }
         }
 
-        [HttpPut("put/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult> PutUserAsync(string id, UserRegister user)
         {
             try
             {
                 var collection = _firestore.Collection("users");
                 var snapshot = await collection.Document(id).GetSnapshotAsync();
-                if (!snapshot.Exists) return NotFound("No existe el usuario");
+                if (!snapshot.Exists) return NotFound("El usuario no existe");
                 await collection.Document(id).DeleteAsync();
                 await collection.AddAsync(_mapper.Map<User>(user));
-                return NoContent();
+                return Ok("El usuario se actualizó");
             }
             catch (Exception e)
             {
@@ -101,7 +101,7 @@ namespace FinancialSystem
                 var snapshot = await collection.Document(id).GetSnapshotAsync();
                 if (!snapshot.Exists) return NotFound("No existe el usuario");
                 await collection.Document(id).DeleteAsync();
-                return NoContent();
+                return Ok("El usuario se eliminó");
             }
             catch (Exception e)
             {
@@ -109,10 +109,10 @@ namespace FinancialSystem
             }
         }
 
-        [HttpGet("probando")]
-        public ActionResult<string> GetAsync(ClaimsPrincipal claim)
-        {
-            return Ok(claim.Identity?.Name);
-        }
+        // [HttpGet("probando")]
+        // public ActionResult<string> GetAsync(ClaimsPrincipal claim)
+        // {
+        //     return Ok(claim.Identity?.Name);
+        // }
     }
 }

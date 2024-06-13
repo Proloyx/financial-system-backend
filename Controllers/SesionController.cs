@@ -31,7 +31,7 @@ namespace FinancialSystem
         }
 
         [HttpGet("login")]
-        public async Task<ActionResult<string>> LoginUserAsync([FromQuery] UserLogin user)
+        public async Task<ActionResult<string>> LoginAsync([FromQuery] UserLogin user)
         {
             try
             {
@@ -61,19 +61,19 @@ namespace FinancialSystem
             }
         }
 
-        // [HttpPost("register")]
-        // public async Task<ActionResult> RegisterUserAsync(UserRegister user)
-        // {
-        //     try
-        //     {
-        //         var collection = _firestore.Collection("users");
-        //         var ret = await collection.AddAsync(_mapper.Map<User>(user));
-        //         return ret.Id != null ? Created() : BadRequest("No se pudo crear al usuario");
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         return StatusCode(500, e.Message);
-        //     }
-        // }
+        [HttpPost("register")]
+        public async Task<ActionResult> RegisterAsync(UserRegister user)
+        {
+            try
+            {
+                var collection = _firestore.Collection("users");;
+                var ret = await collection.AddAsync(_mapper.Map<User>(user));
+                return ret.Id != null ? StatusCode(201, "Usuario creado correctamente") : BadRequest("No se pudo crear al usuario");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }
