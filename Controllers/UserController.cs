@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinancialSystem.Models.UserModels;
 using Google.Apis.Util;
 using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialSystem
 {
     [ApiController]
     [Route("user")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -104,6 +107,12 @@ namespace FinancialSystem
             {
                 return StatusCode(500, e.Message);
             }
+        }
+
+        [HttpGet("probando")]
+        public ActionResult<string> GetAsync(ClaimsPrincipal claim)
+        {
+            return Ok(claim.Identity?.Name);
         }
     }
 }
