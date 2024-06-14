@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinancialSystem.Models.UserModels;
+using FinancialSystem.Services;
 using FirebaseAdmin.Auth;
 using Google.Apis.Util;
 using Google.Cloud.Firestore;
@@ -18,6 +19,7 @@ namespace FinancialSystem
     [ApiController]
     [Route("user")]
     [Authorize]
+    [TypeFilter(typeof(RoleFilter))]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -79,7 +81,7 @@ namespace FinancialSystem
 
         //Hay que hacer bien la actualizacion
         [HttpPut("update/{id}")]
-        public async Task<ActionResult> PutUserAsync(string id, UserRegister user)
+        public async Task<ActionResult> PutUserAsync(string id, UserRegisterAdmin user)
         {
             try
             {
@@ -112,13 +114,5 @@ namespace FinancialSystem
                 return StatusCode(500, e.Message);
             }
         }
-
-        //Probando obtener las claims mediante un objeto
-        // [HttpGet("probando")]
-        // public ActionResult<User> GetAsync()
-        // {
-        //     var user = JsonSerializer.Deserialize<User>(User.FindFirst("usuario")?.Value);
-        //     return Ok(user);
-        // }
     }
 }

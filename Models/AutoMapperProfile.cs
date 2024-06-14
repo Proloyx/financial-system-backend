@@ -16,6 +16,7 @@ namespace FinancialSystem.Models
             CreateMap<Seriess,SeriessRet>();
             CreateMap<User,UserList>();
             CreateMap<UserRegister,User>();
+            CreateMap<UserRegisterAdmin,User>();
             CreateMap<User,UserRegister>();
         }
     }
