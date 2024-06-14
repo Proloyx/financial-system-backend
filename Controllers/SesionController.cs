@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using DotNetEnv;
@@ -30,6 +31,7 @@ namespace FinancialSystem
             _firestore = firestore;
         }
 
+        //Hay que ver si es necesario devolver el password
         [HttpGet("login")]
         public async Task<ActionResult<string>> LoginAsync([FromQuery] UserLogin user)
         {
@@ -39,16 +41,12 @@ namespace FinancialSystem
                 var snapshot = await collection.GetSnapshotAsync();
                 if (snapshot.Count == 0) return BadRequest("Credenciales Inválidas");
                 var userlogged = snapshot.ElementAt(0).ConvertTo<User>();
-
                 var tokenhandler = new JwtSecurityTokenHandler();
                 var tokendesc = new SecurityTokenDescriptor{
                     Subject = new ClaimsIdentity(new Claim[]{
-                        new Claim(ClaimTypes.Sid, userlogged.id),
-                        new Claim(ClaimTypes.Name, userlogged.user_name),
-                        new Claim(ClaimTypes.Email, userlogged.email),
-                        new Claim("Profesion", userlogged.profesion),
+                        new Claim("usuario", JsonSerializer.Serialize(userlogged))
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(10),
+                    Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Env.GetString("Key"))),SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -62,13 +60,17 @@ namespace FinancialSystem
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterAsync(UserRegister user)
+        public async Task<ActionResult> RegisterAsync([FromQuery] UserRegister user)
         {
             try
             {
-                var collection = _firestore.Collection("users");;
-                var ret = await collection.AddAsync(_mapper.Map<User>(user));
-                return ret.Id != null ? StatusCode(201, "Usuario creado correctamente") : BadRequest("No se pudo crear al usuario");
+                // var collection = _firestore.Collection("users").WhereEqualTo("email", user.email);
+                // var snapshot = collection.GetSnapshotAsync();
+                // if (snapshot == null) return BadRequest("El email ya esta en uso");
+
+                var collection2 = _firestore.Collection("users");
+                var ret = await collection2.AddAsync(_mapper.Map<User>(user));
+                return ret.Id != null ? StatusCode(201, "Usuario registrado correctamente") : BadRequest("No se pudo crear al usuario");
             }
             catch (Exception e)
             {

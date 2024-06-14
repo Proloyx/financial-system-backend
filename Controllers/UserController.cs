@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using FinancialSystem.Models.UserModels;
+using FirebaseAdmin.Auth;
 using Google.Apis.Util;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Authorization;
@@ -27,14 +30,14 @@ namespace FinancialSystem
         }
 
         [HttpGet("getall")]
-        public async Task<ActionResult<List<UserRet>>> GetUsersAsync()
+        public async Task<ActionResult<List<UserList>>> GetUsersAsync()
         {
             try
             {
                 var collection = _firestore.Collection("users");
                 var snapshot = await collection.GetSnapshotAsync();
                 var users = snapshot.Documents.Select(s => s.ConvertTo<User>()).ToList();
-                var ret = _mapper.Map<List<UserRet>>(users);
+                var ret = _mapper.Map<List<UserList>>(users);
                 return users.Count != 0 ? Ok(ret) : NotFound("No existen usuarios");
             }
             catch (Exception e)
@@ -60,7 +63,7 @@ namespace FinancialSystem
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddUserAsync(UserRegister user)
+        public async Task<ActionResult> AddUserAsync(UserRegisterAdmin user)
         {
             try
             {
@@ -74,6 +77,7 @@ namespace FinancialSystem
             }
         }
 
+        //Hay que hacer bien la actualizacion
         [HttpPut("update/{id}")]
         public async Task<ActionResult> PutUserAsync(string id, UserRegister user)
         {
@@ -109,10 +113,12 @@ namespace FinancialSystem
             }
         }
 
+        //Probando obtener las claims mediante un objeto
         // [HttpGet("probando")]
-        // public ActionResult<string> GetAsync(ClaimsPrincipal claim)
+        // public ActionResult<User> GetAsync()
         // {
-        //     return Ok(claim.Identity?.Name);
+        //     var user = JsonSerializer.Deserialize<User>(User.FindFirst("usuario")?.Value);
+        //     return Ok(user);
         // }
     }
 }

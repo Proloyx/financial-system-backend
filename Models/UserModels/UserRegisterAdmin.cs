@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FinancialSystem.Models.UserModels
 {
-    public class UserRegister
+    public class UserRegisterAdmin
     {
         [Required]
         public string? user_name {get; set;}
@@ -15,6 +15,8 @@ namespace FinancialSystem.Models.UserModels
         public string? email {get; set;}
         [Required]
         public string? password {get; set;}
+        [Required]
+        public string? role {get; set;}
         public string? profession {get; set;}
     }
 }

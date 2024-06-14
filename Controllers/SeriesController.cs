@@ -10,10 +10,12 @@ using FinancialSystem.Services;
 using FinancialSystem.Models.ObservationModels;
 using FinancialSystem.Models.SearchModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 namespace FinancialSystem.Controllers
 
 {
     [Route("series")]
+    [Authorize]
     public class SeriesController : ControllerBase
     {
         private readonly IRequest _request;

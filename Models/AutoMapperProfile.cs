@@ -14,7 +14,7 @@ namespace FinancialSystem.Models
         public AutoMapperProfile(){
             CreateMap<Observation,ObservationRet>();
             CreateMap<Seriess,SeriessRet>();
-            CreateMap<User,UserRet>();
+            CreateMap<User,UserList>();
             CreateMap<UserRegister,User>();
             CreateMap<User,UserRegister>();
         }
