@@ -3,9 +3,10 @@ using System.Text;
 using DotNetEnv;
 using FinancialSystem.Interfaces;
 using FinancialSystem.Models;
+using FinancialSystem.Models.DB.DBModels;
 using FinancialSystem.Services;
 using Google.Cloud.Firestore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -31,6 +32,8 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt => {
         };        
 });
 builder.Services.AddAuthorization();
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Env.GetString("DbConnection")));
 
 builder.Services.AddSwaggerGen(c =>
 {
