@@ -1,46 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
+using FinancialSystem.Models.DB.DBModels;
 using FinancialSystem.Models.UserModels;
-using FinancialSystem.Services;
-using FirebaseAdmin.Auth;
-using Google.Apis.Util;
-using Google.Cloud.Firestore;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FinancialSystem
 {
     [ApiController]
     [Route("user")]
-    [Authorize]
-    [TypeFilter(typeof(RoleFilter))]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly FirestoreDb _firestore;
+        private readonly AppDbContext _context;
 
-        public UserController(IMapper mapper, FirestoreDb firestore)
+        public UserController(IMapper mapper, AppDbContext context)
         {
             _mapper = mapper;
-            _firestore = firestore;
+            _context = context;
         }
 
-        [HttpGet("getall")]
+        [HttpGet("get")]
         public async Task<ActionResult<List<UserList>>> GetUsersAsync()
         {
             try
             {
-                var collection = _firestore.Collection("users");
-                var snapshot = await collection.GetSnapshotAsync();
-                var users = snapshot.Documents.Select(s => s.ConvertTo<User>()).ToList();
+                var users = await _context.Users.ToListAsync();
+                if (users.IsNullOrEmpty()) return BadRequest("No existen usuarios");
                 var ret = _mapper.Map<List<UserList>>(users);
-                return users.Count != 0 ? Ok(ret) : NotFound("No existen usuarios");
+                return Ok(ret);
             }
             catch (Exception e)
             {
@@ -49,14 +38,13 @@ namespace FinancialSystem
         }
 
         [HttpGet("get/{id}")]
-        public async Task<ActionResult<User>> GetUserByIdAsync(string id)
+        public async Task<ActionResult<User>> GetUserByIdAsync(int id)
         {
             try
             {
-                var collection = _firestore.Collection("users");
-                var snapshot = await collection.Document(id).GetSnapshotAsync();
-                var ret = snapshot.ConvertTo<User>();
-                return ret != null ? Ok(ret) : NotFound("El usuario no se encontró");
+                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
+                if (user==null) return NotFound("No se encontró el usuario");
+                return Ok(_mapper.Map<UserRet>(user));
             }
             catch (Exception e)
             {
@@ -65,13 +53,13 @@ namespace FinancialSystem
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddUserAsync(UserRegisterAdmin user)
+        public async Task<ActionResult> AddUserAsync([FromBody] UserRegisterAdmin user)
         {
             try
             {
-                var collection = _firestore.Collection("users");
-                var ret = await collection.AddAsync(_mapper.Map<User>(user));
-                return ret.Id != null ? StatusCode(201, "El usuario se añadió") : BadRequest("No se pudo añadir al usuario");
+                await _context.AddAsync(_mapper.Map<User>(user));
+                var ret = await _context.SaveChangesAsync();
+                return ret != 0 ? Ok("Se añadió el usuario") : BadRequest("ERROR al añadir al usuario");
             }
             catch (Exception e)
             {
@@ -79,18 +67,18 @@ namespace FinancialSystem
             }
         }
 
-        //Hay que hacer bien la actualizacion
         [HttpPut("update/{id}")]
-        public async Task<ActionResult> PutUserAsync(string id, UserRegisterAdmin user)
+        public async Task<ActionResult> PutUserAsync(int id, [FromBody] UserRegisterAdmin userupdated)
         {
             try
             {
-                var collection = _firestore.Collection("users");
-                var snapshot = await collection.Document(id).GetSnapshotAsync();
-                if (!snapshot.Exists) return NotFound("El usuario no existe");
-                await collection.Document(id).DeleteAsync();
-                await collection.AddAsync(_mapper.Map<User>(user));
-                return Ok("El usuario se actualizó");
+                var user = await _context.Users.FindAsync(id);
+                if (user == null) return NotFound("No se encontró el usuario");
+                user.userName = userupdated.userName;
+                user.Email = userupdated.Email;
+                user.Password = userupdated.Password;
+                var ret = await _context.SaveChangesAsync();
+                return ret != 0 ? Ok("Se actualizó el usuario") : BadRequest("ERROR al actualizar al usuario");
             }
             catch (Exception e)
             {
@@ -99,15 +87,61 @@ namespace FinancialSystem
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult> DeleteUserAsync(string id)
+        public async Task<ActionResult> DeleteUserAsync(int id)
         {
             try
             {
-                var collection = _firestore.Collection("users");
-                var snapshot = await collection.Document(id).GetSnapshotAsync();
-                if (!snapshot.Exists) return NotFound("No existe el usuario");
-                await collection.Document(id).DeleteAsync();
-                return Ok("El usuario se eliminó");
+                var user = await _context.Users.FindAsync(id);
+                if (user == null) return NotFound("No se encontró el usuario");
+                _context.Users.Remove(user);
+                var ret = await _context.SaveChangesAsync();
+                return ret != 0 ? Ok("Se eliminó el usuario") : BadRequest("ERROR al eliminar al usuario");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("admin/{id}")]
+        public async Task<ActionResult> SetUserAdminAsync(int id)
+        {
+            try
+            {
+                var role = await _context.Roles.FindAsync(2);
+                if (role == null) return BadRequest("No se encontró el rol admin");
+
+                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
+                if (user == null) return NotFound("No se encontró el usuario");
+                if (user.Roles.Contains(role)) return BadRequest("El usuario ya es admin");
+
+                user.Roles.Add(role);
+                var ret = await _context.SaveChangesAsync();
+
+                return ret != 0 ? Ok("Se añadió el rol de admin al usuario") : BadRequest("ERROR al añadir el rol de admin al usuario");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("unadmin/{id}")]
+        public async Task<ActionResult> QuitarUserAdminAsync(int id)
+        {
+            try
+            {
+                var role = await _context.Roles.FindAsync(2);
+                if (role == null) return BadRequest("No se encontró el rol admin");
+
+                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
+                if (user == null) return NotFound("No se encontró el usuario");
+                if (!user.Roles.Contains(role)) return BadRequest("El usuario no es admin");
+                
+                user.Roles.Remove(role);
+                var ret = await _context.SaveChangesAsync();
+
+                return ret != 0 ? Ok("Se eliminó el rol de admin al usuario") : BadRequest("ERROR al eliminar el rol de admin al usuario");
             }
             catch (Exception e)
             {

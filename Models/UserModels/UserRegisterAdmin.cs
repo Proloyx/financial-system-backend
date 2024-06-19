@@ -9,14 +9,11 @@ namespace FinancialSystem.Models.UserModels
     public class UserRegisterAdmin
     {
         [Required]
-        public string? user_name {get; set;}
+        public string userName { get; set; } = null!;
         [Required]
         [EmailAddress]
-        public string? email {get; set;}
+        public string Email { get; set; } = null!;
         [Required]
-        public string? password {get; set;}
-        [Required]
-        public string? role {get; set;}
-        public string? profession {get; set;}
+        public string Password { get; set; } = null!;
     }
 }

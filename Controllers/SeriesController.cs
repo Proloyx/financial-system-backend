@@ -15,7 +15,6 @@ namespace FinancialSystem.Controllers
 
 {
     [Route("series")]
-    [Authorize]
     public class SeriesController : ControllerBase
     {
         private readonly IRequest _request;

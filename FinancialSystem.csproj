@@ -11,8 +11,6 @@
   <ItemGroup>
     <PackageReference Include="automapper" Version="13.0.1" />
     <PackageReference Include="dotnetenv" Version="3.0.0" />
-    <PackageReference Include="firebaseadmin" Version="3.0.0" />
-    <PackageReference Include="Google.Cloud.Firestore" Version="3.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
