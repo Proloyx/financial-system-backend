@@ -1,6 +1,8 @@
 using AutoMapper;
 using FinancialSystem.Models.DB.DBModels;
 using FinancialSystem.Models.UserModels;
+using FinancialSystem.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,8 @@ namespace FinancialSystem
 {
     [ApiController]
     [Route("user")]
+    [Authorize]
+    [TypeFilter(typeof(RoleFilter))]
     public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -53,10 +57,13 @@ namespace FinancialSystem
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddUserAsync([FromBody] UserRegisterAdmin user)
+        public async Task<ActionResult> AddUserAsync([FromBody] UserRegister user)
         {
             try
             {
+                var email = _context.Users.Any(u => u.Email == user.Email);
+                if (email) return BadRequest("Existe un usuario con ese correo");
+
                 await _context.AddAsync(_mapper.Map<User>(user));
                 var ret = await _context.SaveChangesAsync();
                 return ret != 0 ? Ok("Se añadió el usuario") : BadRequest("ERROR al añadir al usuario");
@@ -68,13 +75,13 @@ namespace FinancialSystem
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult> PutUserAsync(int id, [FromBody] UserRegisterAdmin userupdated)
+        public async Task<ActionResult> PutUserAsync(int id, [FromBody] UserRegister userupdated)
         {
             try
             {
                 var user = await _context.Users.FindAsync(id);
                 if (user == null) return NotFound("No se encontró el usuario");
-                user.userName = userupdated.userName;
+                user.UserName = userupdated.UserName;
                 user.Email = userupdated.Email;
                 user.Password = userupdated.Password;
                 var ret = await _context.SaveChangesAsync();

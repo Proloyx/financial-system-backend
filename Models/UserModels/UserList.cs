@@ -9,6 +9,6 @@ namespace FinancialSystem.Models.UserModels
     public class UserList
     {
         public int UserId { get; set; }
-        public string userName { get; set; } = null!;
+        public string UserName { get; set; } = null!;
     }
 }

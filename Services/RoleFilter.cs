@@ -12,16 +12,24 @@ namespace FinancialSystem.Services
 {
     public class RoleFilter:IAuthorizationFilter
     {
+        private readonly AppDbContext _context;
+
+        public RoleFilter(AppDbContext context)
+        {
+            _context = context;
+        }
         public void OnAuthorization(AuthorizationFilterContext context){
-            // var user = context.HttpContext.User;
-            // if (!user.Identity.IsAuthenticated){
-            //     context.Result = new UnauthorizedResult();
-            //     return;
-            // } 
-            // var claim = JsonSerializer.Deserialize<User>(user.FindFirst("usuario")?.Value);
-            // if (claim == null || claim.role != "admin"){
-            //     context.Result = new ForbidResult();
-            // }
+            var claim = context.HttpContext.User;
+            if (!claim.Identity.IsAuthenticated){
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+
+            var user = JsonSerializer.Deserialize<UserRet>(claim.FindFirst("user")?.Value);
+
+            if (user == null || !user.Roles.Any(role => role.Name == "admin")){
+                context.Result = new ForbidResult();
+            }
         }
     }
 }
