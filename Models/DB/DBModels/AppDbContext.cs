@@ -15,8 +15,6 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Log> Logs { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -27,16 +25,6 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Log>(entity =>
-        {
-            entity.HasKey(e => e.LogId).HasName("logs_pkey");
-
-            entity.ToTable("logs", "fso");
-
-            entity.Property(e => e.LogId).HasColumnName("log_id");
-            entity.Property(e => e.LogMessage).HasColumnName("log_message");
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("roles_pkey");
