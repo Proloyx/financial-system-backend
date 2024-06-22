@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using AutoMapper;
 using FinancialSystem.Models.DB.DBModels;
 using FinancialSystem.Models.ObservationModels;
@@ -15,6 +16,7 @@ namespace FinancialSystem.Models
             CreateMap<Role,RoleRet>();
             CreateMap<Observation,ObservationRet>();
             CreateMap<Seriess,SeriessRet>();
+            CreateMap<PingReply,PingReplyDTO>();
         }
     }
 }
