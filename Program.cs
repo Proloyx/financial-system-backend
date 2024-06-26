@@ -7,7 +7,6 @@ using FinancialSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
 
 Env.Load();
 
@@ -73,7 +72,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddSingleton<IRequest,Request>();
 var app = builder.Build();
-app.UseSerilogRequestLogging();
+
+//app.UseSerilogRequestLogging();
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -100,6 +100,7 @@ app.Run();
 //             .Enrich.WithProperty("Application", ctx.HostingEnvironment.ApplicationName)
 //             .WriteTo.Console()
 //             );
+// Recordar dspues d app app.UseSerilogRequestLogging();
 // }
 // catch (Exception e)
 // {
