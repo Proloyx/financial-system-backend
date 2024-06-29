@@ -33,7 +33,7 @@ namespace FinancialSystem
 
         //Hay que ver si es necesario devolver el password
         [HttpGet("login")]
-        public async Task<ActionResult<string>> LoginAsync(UserLogin user)
+        public async Task<ActionResult<string>> LoginAsync([FromQuery] UserLogin user)
         {
             try
             {
