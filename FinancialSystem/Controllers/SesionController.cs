@@ -33,11 +33,11 @@ namespace FinancialSystem
 
         //Hay que ver si es necesario devolver el password
         [HttpGet("login")]
-        public async Task<ActionResult<string>> LoginAsync([FromQuery] UserLogin user)
+        public async Task<ActionResult<string>> LoginAsync(UserLogin user)
         {
             try
             {
-                var logging = await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(u => u.Email == user.email && u.Password == user.password);
+                var logging = await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(u => u.Email == user.Email && u.Password == user.Password);
                 if (logging == null) return BadRequest("Credenciales Inválidas");
                 var logged = _mapper.Map<UserRet>(logging);
                 var tokenhandler = new JwtSecurityTokenHandler();
@@ -59,7 +59,7 @@ namespace FinancialSystem
          }
 
         [HttpPost("register")]
-        public async Task<ActionResult> RegisterAsync([FromQuery] UserRegister user)
+        public async Task<ActionResult> RegisterAsync(UserRegister user)
         {
             try
             {
