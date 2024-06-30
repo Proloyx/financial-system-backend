@@ -24,7 +24,8 @@ Financial System Observer API is a Web API developed in ASP.NET whose objective 
 - Swagger
 - PostgreSQL
 - Docker
-- Github
+- Git
+- Github Actions
 - Grafana
 - xUnit
 
@@ -57,9 +58,7 @@ Need role admin
 
 ## Contact
 
-- Author: [Eloy]
-- Email: [eloycruzmartin@gmail.com]
-- LinkedIn: [eloycruzmartin](https://www.linkedin.com/in/eloycruzmartin)
+- Email: eloycruzmartin@gmail.com
 
 ## FREDs
 
