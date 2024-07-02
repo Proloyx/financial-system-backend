@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FSTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1c9a08f3c1988c642ac93c859076fdc17e90706e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8df0c64c6d66c186a44aba50d0da9765e6573de")]
 [assembly: System.Reflection.AssemblyProductAttribute("FSTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FSTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

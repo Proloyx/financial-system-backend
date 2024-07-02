@@ -14,6 +14,7 @@ Financial System Observer API is a Web API developed in ASP.NET whose objective 
   - [Series](#Series)
   - [Users](#Users)
 - [Contact](#Contact)
+- [Grafana](#Grafana)
 - [FREDs](#FREDs)
 - [Soon](#Soon)
 
@@ -59,6 +60,11 @@ Need role admin
 ## Contact
 
 - Email: eloycruzmartin@gmail.com
+
+## Grafana
+
+Dashboard example
+<img width="1228" alt="Grafana" src="Grafana.png">
 
 ## FREDs
 
