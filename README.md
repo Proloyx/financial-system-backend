@@ -1,5 +1,3 @@
-<img width="1280" alt="Captura de pantalla 2024-07-02 a las 16 14 48" src="https://github.com/Proloyx/financial-system-backend/assets/109438329/e9f86b86-63c8-4f22-94df-d17a666b7e34"># Financial System Observer API
-
 ## Description
 
 Financial System Observer API is a Web API developed in ASP.NET whose objective is to obtain information about financial markets for subsequent analysis. It is based on consuming endpoints provided by the St. Louis Federal Reserve and graphing the information obtained through Grafana, in turn having a user management system with roles and permissions to maintain its security.
