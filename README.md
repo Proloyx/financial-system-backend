@@ -1,4 +1,4 @@
-# Financial System Observer API
+<img width="1280" alt="Captura de pantalla 2024-07-02 a las 16 14 48" src="https://github.com/Proloyx/financial-system-backend/assets/109438329/e9f86b86-63c8-4f22-94df-d17a666b7e34"># Financial System Observer API
 
 ## Description
 
@@ -14,6 +14,7 @@ Financial System Observer API is a Web API developed in ASP.NET whose objective 
   - [Series](#Series)
   - [Users](#Users)
 - [Contact](#Contact)
+- [Grafana](#Grafana)
 - [FREDs](#FREDs)
 - [Soon](#Soon)
 
@@ -59,6 +60,12 @@ Need role admin
 ## Contact
 
 - Email: eloycruzmartin@gmail.com
+
+## Grafana
+
+Dashboard example
+
+<img width="1228" alt="Grafana" src="https://github.com/Proloyx/financial-system-backend/assets/109438329/3dc0132b-d0fe-4ccc-a1eb-5ea19516c717">
 
 ## FREDs
 
