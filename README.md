@@ -65,7 +65,7 @@ Need role admin
 
 Dashboard example
 
-<img width="1228" alt="Grafana" src="https://github.com/Proloyx/financial-system-backend/assets/109438329/3dc0132b-d0fe-4ccc-a1eb-5ea19516c717">
+<img width="1228" alt="Grafana" src="Grafana.png">
 
 ## FREDs
 
