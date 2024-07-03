@@ -13,6 +13,7 @@ Financial System Observer API is a Web API developed in ASP.NET whose objective 
   - [Sesion](#Sesion)
   - [Series](#Series)
   - [Users](#Users)
+  - [Massive](#Massive)
 - [Contact](#Contact)
 - [Grafana](#Grafana)
 - [FREDs](#FREDs)
@@ -56,6 +57,10 @@ Need role admin
 - **POST /user/add**: Create a new user.
 - **PUT /user/update/{id}**: Update an existing user.
 - **DELETE /user/delete/{id}**: Delete a user.
+
+### Massive
+
+- **PUT /massive/massiveupdt**: Only for demostration
 
 ## Contact
 
