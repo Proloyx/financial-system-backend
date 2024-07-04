@@ -82,13 +82,15 @@ Documentation
 https://www.sec.gov/edgar/sec-api-documentation
 
 Sec Filings
-https://data.sec.gov/submissions/CIK##########.json
+https://data.sec.gov/submissions/CIK0000789019.json
 
 All information about a specific company
-https://data.sec.gov/api/xbrl/companyfacts/CIK##########.json
+https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json
 
 All the information about a concept
-https://data.sec.gov/api/xbrl/companyconcept/CIK##########/us-gaap/AccountsPayableCurrent.json
+https://data.sec.gov/api/xbrl/companyconcept/CIK0000789019/us-gaap/AccountsPayableCurrent.json       => frame
+
+
 
 The information of all the companies for a concept and a date
 https://data.sec.gov/api/xbrl/frames/us-gaap/AccountsPayableCurrent/USD/CY2023Q4I.json
