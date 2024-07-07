@@ -1,4 +1,5 @@
 using AutoMapper;
+using FinancialSystem.Models;
 using FinancialSystem.Models.DB.DBModels;
 using FinancialSystem.Models.UserModels;
 using FinancialSystem.Services;
@@ -149,6 +150,38 @@ namespace FinancialSystem
                 var ret = await _context.SaveChangesAsync();
 
                 return ret != 0 ? Ok("Se eliminó el rol de admin al usuario") : BadRequest("ERROR al eliminar el rol de admin al usuario");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("massiveupdt")]
+        public async Task<ActionResult> PutMassiveAsync([FromBody] Massiveupdt mass)
+        {
+            try
+            {
+                var ret = await _context.Users
+                    .Where(u => u.Password == mass.oldpass)
+                    .ExecuteUpdateAsync(u => u.SetProperty(p => p.Password, t => mass.newpass));
+                return ret != 0 ? Ok("Se actualizaron las contraseñas") : BadRequest("ERROR al actualizar las contraseñas");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpDelete("massivedlt")]
+        public async Task<ActionResult> DeleteMassiveAsync(string name)
+        {
+            try
+            {
+                var ret = await _context.Users
+                    .Where(u => u.UserName == name)
+                    .ExecuteDeleteAsync();
+                return ret != 0 ? Ok("Se eliminaron los usuarios") : BadRequest("ERROR al eliminar los usuarios");
             }
             catch (Exception e)
             {
