@@ -42,6 +42,31 @@ namespace FinancialSystem.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [HttpGet("sqlite")]
+        public IActionResult Trying()
+        {
+            try
+            {
+                var ruta = Path.Combine(Directory.GetCurrentDirectory(), "Data", "FSObserver.db3");
+                Console.WriteLine(ruta);
+                var rutaraiz = Path.Combine(Directory.GetCurrentDirectory(), "FSObserver.db3");
+                Console.WriteLine(rutaraiz);
+                if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "FSObserver.db3")))
+                    {
+                        Console.WriteLine("existe");
+                    }
+                if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Data", "FSObserver.db3")))
+                    {
+                        Console.WriteLine("existe");
+                    }
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }
   
