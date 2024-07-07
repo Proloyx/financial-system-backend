@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using FinancialSystem.Models.DB.DBModels;
 using Microsoft.EntityFrameworkCore;
 using FinancialSystem.Models.DB.DBSQLite;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FinancialSystem.Controllers
 
@@ -29,10 +30,18 @@ namespace FinancialSystem.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<List<Company>>> GetAsync(string name)
         {
-            using (var context = new SQLiteDbContext()) {
+            try
+            {
+                using (var context = new SQLiteDbContext()) {
                 List<Company> companies = await context.Companies.Where(c => c.EntityName.ToLower().Contains(name)).ToListAsync();
-                return Ok(companies);
+                return !companies.IsNullOrEmpty() ? Ok(companies) : NotFound("No se encontró la compañía");
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
             }
         }
     }
-}   
+}
+  
