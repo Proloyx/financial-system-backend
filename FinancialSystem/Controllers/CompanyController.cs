@@ -48,18 +48,12 @@ namespace FinancialSystem.Controllers
         {
             try
             {
-                var ruta = Path.Combine(Directory.GetCurrentDirectory(), "Data", "FSObserver.db3");
-                Console.WriteLine(ruta);
-                var rutaraiz = Path.Combine(Directory.GetCurrentDirectory(), "FSObserver.db3");
-                Console.WriteLine(rutaraiz);
-                if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "FSObserver.db3")))
-                    {
-                        Console.WriteLine("existe");
-                    }
-                if (Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "Data", "FSObserver.db3")))
-                    {
-                        Console.WriteLine("existe");
-                    }
+                string currentDirectory = Directory.GetCurrentDirectory();
+                string[] files = Directory.GetFiles(currentDirectory);
+                Console.WriteLine(files);
+                string currentDirectory3 = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+                string[] files3 = Directory.GetFiles(currentDirectory3);
+                Console.WriteLine(files3);
                 return Ok();
             }
             catch (Exception e)
