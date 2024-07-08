@@ -48,12 +48,26 @@ namespace FinancialSystem.Controllers
         {
             try
             {
+                Console.WriteLine(Directory.GetCurrentDirectory());
+                Console.WriteLine("");
+
                 string currentDirectory = Directory.GetCurrentDirectory();
                 string[] files = Directory.GetFiles(currentDirectory);
-                Console.WriteLine(files);
+                foreach (string file in files)
+                {
+                    Console.WriteLine(file);
+                }
+                
+                Console.WriteLine("");
+                Console.WriteLine(Path.Combine(Directory.GetCurrentDirectory(), "Data"));
+                Console.WriteLine("");
                 string currentDirectory3 = Path.Combine(Directory.GetCurrentDirectory(), "Data");
                 string[] files3 = Directory.GetFiles(currentDirectory3);
-                Console.WriteLine(files3);
+                foreach (string file in files3)
+                {
+                    Console.WriteLine(file);
+                }
+                
                 return Ok();
             }
             catch (Exception e)
