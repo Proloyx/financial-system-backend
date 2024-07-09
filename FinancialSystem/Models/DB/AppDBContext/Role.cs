@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialSystem.Models.DB.DBModels;
+namespace FinancialSystem.Models.DB.AppDBContext;
 
 public partial class Role
 {

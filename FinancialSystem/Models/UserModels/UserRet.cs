@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FinancialSystem.Models.RoleModels;
 
-namespace FinancialSystem.Models.DB.DBModels;
+namespace FinancialSystem.Models.UserModels;
 
 public partial class UserRet
 {

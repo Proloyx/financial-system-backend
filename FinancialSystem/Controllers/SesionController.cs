@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using DotNetEnv;
-using FinancialSystem.Models.DB.DBModels;
+using FinancialSystem.Models.DB.AppDBContext;
 using FinancialSystem.Models.UserModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

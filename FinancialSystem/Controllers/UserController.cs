@@ -1,6 +1,6 @@
 using AutoMapper;
 using FinancialSystem.Models;
-using FinancialSystem.Models.DB.DBModels;
+using FinancialSystem.Models.DB.AppDBContext;
 using FinancialSystem.Models.UserModels;
 using FinancialSystem.Services;
 using Microsoft.AspNetCore.Authorization;

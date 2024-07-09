@@ -1,9 +1,10 @@
 using System.Net.NetworkInformation;
 using AutoMapper;
-using FinancialSystem.Models.DB.DBModels;
+using FinancialSystem.Models.DB.AppDBContext;
+using FinancialSystem.Models.UserModels;
 using FinancialSystem.Models.ObservationModels;
 using FinancialSystem.Models.SearchModels;
-using FinancialSystem.Models.UserModels;
+using FinancialSystem.Models.RoleModels;
 
 namespace FinancialSystem.Models
 {
