@@ -9,6 +9,6 @@ namespace FinancialSystem.Interfaces
 {
     public interface IRequest
     {
-        public Task<HttpResponseMessage> Send(string url);
+        public Task<HttpResponseMessage> SendAsync(string url);
     }
 }

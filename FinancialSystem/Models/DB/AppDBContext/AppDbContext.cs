@@ -27,7 +27,7 @@ public partial class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=pg-2b23edca-eloycruzmartin97-4d55.e.aivencloud.com;Port=28480;Database=FSObserverDB;Username=avnadmin;Password=AVNS_tvF7h_1a23ei4g63dG7");
+        => optionsBuilder.UseNpgsql();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,7 +1,7 @@
 using AutoMapper;
 using FinancialSystem;
 using FinancialSystem.Models;
-using FinancialSystem.Models.DB.DBModels;
+using FinancialSystem.Models.DB.AppDBContext;
 using FinancialSystem.Models.UserModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

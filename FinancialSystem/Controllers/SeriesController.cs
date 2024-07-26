@@ -28,7 +28,7 @@ namespace FinancialSystem.Controllers
             try
             {
                 string url = UrlBuilder.Build("/series/observations", observationParams);
-                var response = await _request.Send(url);
+                var response = await _request.SendAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var des = JsonSerializer.Deserialize<Series>(result)?.observations;
                 var ret = _mapper.Map<List<ObservationRet>>(des);
@@ -46,7 +46,7 @@ namespace FinancialSystem.Controllers
             try
             {
                 string url = UrlBuilder.Build("/series/search", searchParams);
-                var response = await _request.Send(url);
+                var response = await _request.SendAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
                 var des = JsonSerializer.Deserialize<Search>(result)?.seriess;
                 var ret = _mapper.Map<List<SeriessRet>>(des);

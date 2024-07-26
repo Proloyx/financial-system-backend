@@ -37,6 +37,7 @@ namespace FinancialSystem
         {
             try
             {
+                
                 var logging = await _context.Users.Include(r => r.Roles).FirstOrDefaultAsync(u => u.Email == user.Email && u.Password == user.Password);
                 if (logging == null) return BadRequest("Credenciales Inválidas");
                 var logged = _mapper.Map<UserRet>(logging);
