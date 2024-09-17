@@ -81,6 +81,7 @@ try
 
     builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
     builder.Services.AddSingleton<IRequest,Request>();
+    builder.Services.AddScoped<IUserRepository,UserRepository>();
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();

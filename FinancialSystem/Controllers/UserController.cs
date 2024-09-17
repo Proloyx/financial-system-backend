@@ -1,4 +1,5 @@
 using AutoMapper;
+using FinancialSystem.Interfaces;
 using FinancialSystem.Models;
 using FinancialSystem.Models.DB.AppDBContext;
 using FinancialSystem.Models.UserModels;
@@ -19,11 +20,13 @@ namespace FinancialSystem
     {
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(IMapper mapper, AppDbContext context)
+        public UserController(IMapper mapper, AppDbContext context, IUserRepository userRepository)
         {
             _mapper = mapper;
             _context = context;
+            _userRepository = userRepository;
         }
 
         [HttpGet("get")]
@@ -31,10 +34,9 @@ namespace FinancialSystem
         {
             try
             {
-                var users = await _context.Users.ToListAsync();
-                if (users.IsNullOrEmpty()) return BadRequest("No existen usuarios");
-                var ret = _mapper.Map<List<UserList>>(users);
-                return Ok(ret);
+                var users = await _userRepository.GetUsersAsync();
+                if (users.IsNullOrEmpty()) return NotFound("No existen usuarios");
+                return Ok(users);
             }
             catch (Exception e)
             {
@@ -47,9 +49,9 @@ namespace FinancialSystem
         {
             try
             {
-                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
-                if (user==null) return NotFound("No se encontró el usuario");
-                return Ok(_mapper.Map<UserRet>(user));
+                var user = await _userRepository.GetUserByIdAsync(id);
+                if (user == null) return NotFound("No se encontró el usuario");
+                return Ok(user);
             }
             catch (Exception e)
             {
@@ -62,11 +64,8 @@ namespace FinancialSystem
         {
             try
             {
-                var email = _context.Users.Any(u => u.Email == user.Email);
-                if (email) return BadRequest("Existe un usuario con ese correo");
-
-                await _context.AddAsync(_mapper.Map<User>(user));
-                var ret = await _context.SaveChangesAsync();
+                var ret = await _userRepository.AddUserAsync(user);
+                if (ret == -1) return BadRequest("Existe un usuario con ese correo");
                 return ret != 0 ? Ok("Se añadió el usuario") : BadRequest("ERROR al añadir al usuario");
             }
             catch (Exception e)
@@ -80,12 +79,8 @@ namespace FinancialSystem
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null) return NotFound("No se encontró el usuario");
-                user.UserName = userupdated.UserName;
-                user.Email = userupdated.Email;
-                user.Password = userupdated.Password;
-                var ret = await _context.SaveChangesAsync();
+                var ret = await _userRepository.PutUserAsync(id, userupdated);
+                if (ret == -1) return NotFound("No se encontró el usuario");
                 return ret != 0 ? Ok("Se actualizó el usuario") : BadRequest("ERROR al actualizar al usuario");
             }
             catch (Exception e)
@@ -99,10 +94,8 @@ namespace FinancialSystem
         {
             try
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null) return NotFound("No se encontró el usuario");
-                _context.Users.Remove(user);
-                var ret = await _context.SaveChangesAsync();
+                var ret = await _userRepository.DeleteUserAsync(id);
+                if (ret == -1) return NotFound("No se encontró el usuario");
                 return ret != 0 ? Ok("Se eliminó el usuario") : BadRequest("ERROR al eliminar al usuario");
             }
             catch (Exception e)
@@ -116,15 +109,10 @@ namespace FinancialSystem
         {
             try
             {
-                var role = await _context.Roles.FindAsync(2);
-                if (role == null) return BadRequest("No se encontró el rol admin");
-
-                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
-                if (user == null) return NotFound("No se encontró el usuario");
-                if (user.Roles.Contains(role)) return BadRequest("El usuario ya es admin");
-
-                user.Roles.Add(role);
-                var ret = await _context.SaveChangesAsync();
+                var ret = await _userRepository.SetUserAdminAsync(id);
+                if (ret == -1) return BadRequest("No se encontró el rol admin");
+                if (ret == -2) return NotFound("No se encontró el usuario");
+                if (ret == -3) return BadRequest("El usuario ya es admin");
 
                 return ret != 0 ? Ok("Se añadió el rol de admin al usuario") : BadRequest("ERROR al añadir el rol de admin al usuario");
             }
@@ -139,16 +127,10 @@ namespace FinancialSystem
         {
             try
             {
-                var role = await _context.Roles.FindAsync(2);
-                if (role == null) return BadRequest("No se encontró el rol admin");
-
-                var user = await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(u => u.UserId == id );
-                if (user == null) return NotFound("No se encontró el usuario");
-                if (!user.Roles.Contains(role)) return BadRequest("El usuario no es admin");
-                
-                user.Roles.Remove(role);
-                var ret = await _context.SaveChangesAsync();
-
+                var ret = await _userRepository.QuitarUserAdminAsync(id);
+                if (ret == -1) return BadRequest("No se encontró el rol admin");
+                if (ret == -2) return NotFound("No se encontró el usuario");
+                if (ret == -3) return BadRequest("El usuario no es admin");
                 return ret != 0 ? Ok("Se eliminó el rol de admin al usuario") : BadRequest("ERROR al eliminar el rol de admin al usuario");
             }
             catch (Exception e)
@@ -162,9 +144,7 @@ namespace FinancialSystem
         {
             try
             {
-                var ret = await _context.Users
-                    .Where(u => u.Password == mass.oldpass)
-                    .ExecuteUpdateAsync(u => u.SetProperty(p => p.Password, t => mass.newpass));
+                var ret = await _userRepository.PutMassiveAsync(mass);
                 return ret != 0 ? Ok("Se actualizaron las contraseñas") : BadRequest("ERROR al actualizar las contraseñas");
             }
             catch (Exception e)
@@ -178,9 +158,7 @@ namespace FinancialSystem
         {
             try
             {
-                var ret = await _context.Users
-                    .Where(u => u.UserName == name)
-                    .ExecuteDeleteAsync();
+                var ret = await _userRepository.DeleteMassiveAsync(name);
                 return ret != 0 ? Ok("Se eliminaron los usuarios") : BadRequest("ERROR al eliminar los usuarios");
             }
             catch (Exception e)
