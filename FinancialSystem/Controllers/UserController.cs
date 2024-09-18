@@ -18,14 +18,10 @@ namespace FinancialSystem
     [TypeFilter(typeof(RoleFilter))]
     public class UserController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly IUserRepository _userRepository;
 
-        public UserController(IMapper mapper, AppDbContext context, IUserRepository userRepository)
+        public UserController(IUserRepository userRepository)
         {
-            _mapper = mapper;
-            _context = context;
             _userRepository = userRepository;
         }
 

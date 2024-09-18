@@ -8140,32 +8140,35 @@
     ]
   },
   "packageFolders": {
-    "/Users/eloy/.nuget/packages/": {}
+    "C:\\Users\\eloyc\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/eloy/Desktop/Proyecto/FinancialSystem/FSTests/FSTests.csproj",
+      "projectUniqueName": "C:\\Datos\\Eloy\\Work\\Proyectos\\Financial System\\financial-system-backend\\FSTests\\FSTests.csproj",
       "projectName": "FSTests",
-      "projectPath": "/Users/eloy/Desktop/Proyecto/FinancialSystem/FSTests/FSTests.csproj",
-      "packagesPath": "/Users/eloy/.nuget/packages/",
-      "outputPath": "/Users/eloy/Desktop/Proyecto/FinancialSystem/FSTests/obj/",
+      "projectPath": "C:\\Datos\\Eloy\\Work\\Proyectos\\Financial System\\financial-system-backend\\FSTests\\FSTests.csproj",
+      "packagesPath": "C:\\Users\\eloyc\\.nuget\\packages\\",
+      "outputPath": "C:\\Datos\\Eloy\\Work\\Proyectos\\Financial System\\financial-system-backend\\FSTests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/eloy/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\eloyc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/eloy/Desktop/Proyecto/FinancialSystem/FinancialSystem/FinancialSystem.csproj": {
-              "projectPath": "/Users/eloy/Desktop/Proyecto/FinancialSystem/FinancialSystem/FinancialSystem.csproj"
+            "C:\\Datos\\Eloy\\Work\\Proyectos\\Financial System\\financial-system-backend\\FinancialSystem\\FinancialSystem.csproj": {
+              "projectPath": "C:\\Datos\\Eloy\\Work\\Proyectos\\Financial System\\financial-system-backend\\FinancialSystem\\FinancialSystem.csproj"
             }
           }
         }
@@ -8230,7 +8233,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.301/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
